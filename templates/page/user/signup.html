@@ -1,32 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'common/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>익명서비스</title>
-    <style>
-        .login-form {
-            text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="login-form">
-        {% for message in messages %}
-            {{message}}
-        {% endfor %}
-
-        <form method="post" id="sign_form">
-            {% csrf_token %}
-            <label name="asd">아이디</label>
-            <input type="text" name="username" id="username">
-            <label>비밀번호</label>
-            <input type="password" name="password" id="password">
-            <label>비밀번호확인</label>
-            <input type="password" name="chk_password" id="chk_password">
-            <button type="button" id="sign_btn">회원가입</button>
-        </form>
+{% block content %}
+    {% for message in messages %}
+        <div class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <form method="post" id="sign_form">
+                        {% csrf_token %}
+                        <label class="form-label">아이디</label>
+                        <input class="form-control" type="text" name="username" id="username">
+                        <label class="form-label">비밀번호</label>
+                        <input class="form-control" type="password" name="password" id="password">
+                        <label class="form-label">비밀번호확인</label>
+                        <input class="form-control" type="password" name="chk_password" id="chk_password">
+                        <label class="form-label">닉네임</label>
+                        <input class="form-control" type="text" name="nickname" id="nickname">
+                    </form>
+                </div>
+                <div class="col-12 text-end">
+                    <a class="fs-5 text-decoration-none m-3"
+                       style="color: black;font-weight: bold;cursor: pointer"
+                       id="sign_btn"
+                    >회원가입</a>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -36,6 +39,7 @@
         let username = document.getElementById('username');
         let password = document.getElementById('password');
         let chk_password = document.getElementById('chk_password');
+        let nickname = document.getElementById('nickname');
 
         sign_btn.addEventListener('click', () => {
             if (!username.value) {
@@ -50,9 +54,11 @@
                 alert('비밀번호를 입력해주세요.');
                 return false;
             }
+            if (!nickname.value) {
+                alert('닉네임을 입력해주세요.');
+                return false;
+            }
             sign_form.submit();
         });
     </script>
-</body>
-
-</html>
+{% endblock %}

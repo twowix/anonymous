@@ -8,6 +8,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     reg_date = models.DateTimeField(auto_now_add=True)
+    img_url = models.URLField(null=True)
 
     class Meta:
         db_table = "post"

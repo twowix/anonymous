@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import AbstractUser
 
-# 필수! 커스텀 유저 생성시 settings에 사용 유저 모델을 정의
+# 필수! 커스텀 유저 생성시 settings 에 사용 유저 모델을 정의
 
 # AbstractUser
 # - django 기본 유저 모델 (이것저것 많이 포함되어있음, 각종 필드, 각종 함수(유저생성, 유저인증 등등))
