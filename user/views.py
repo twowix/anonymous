@@ -6,8 +6,13 @@ from django.shortcuts import redirect, render
 
 
 def sign_in(request):
+    # 값을 읽고싶을때 GET - URL PARAMETER (http://awdaw.com?title=안녕하세요&param=메롱&param3=메롱2)
+    # 값을 지우고싶을땐 DELETE
+
+    # 값을 수정 PUT - body 
+    # 값을 생성 POST
     if request.method == "GET":
-        return render(request, 'page/user/signin.html')
+        return render(request, 'page/signin.html')
 
     if request.method == "POST":
         username = request.POST['username']
@@ -23,15 +28,14 @@ def sign_in(request):
 
 def sign_up(request):
     if request.method == "GET":
-        return render(request, 'page/user/signup.html')
+        return render(request, 'page/signup.html')
 
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         nickname = request.POST['nickname']
-        print(username)
-        print(password)
-        print(nickname)
+        
+        # exists - 존재하면 True, 존재하지 않으면 False
         if User.objects.filter(username=username).exists():
             messages.error(request, '이미 존재하는 아이디입니다')
             return redirect('sign_up')
@@ -44,7 +48,6 @@ def sign_up(request):
             user.save()
             login(request, user)
             return redirect('board')
-
 
 
 def sign_out(request):

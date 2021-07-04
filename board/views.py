@@ -10,20 +10,21 @@ from django.conf import settings
 def board(request):
     # 게시글 리스트
     if request.method == "GET":
-        page = int(request.GET.get('page', 1))
-
-        post_set = Post.objects.all().order_by('-id')
+        page = request.GET.get('page', 1)
+        search_text = request.GET.get('search_text', "")
+        post_set = Post.objects.filter(title__icontains=search_text).order_by('-id')
         paginator = Paginator(post_set, 6)
         post_set = paginator.get_page(page)
         context = {
             'post_set': post_set,
+            'search_text':search_text,
         }
-        return render(request, 'page/board/board.html', context)
+        return render(request, 'page/index.html', context)
 
 
 def post_write(request):
     if request.method == "GET":
-        return render(request, 'page/board/post_write.html')
+        return render(request, 'page/post_write.html')
 
     if request.method == "POST":
         title = request.POST['title']
@@ -49,7 +50,7 @@ def post_detail(request, post_id):
         context = {
             'post': post,
         }
-        return render(request, 'page/board/post_detail.html', context)
+        return render(request, 'page/post_detail.html', context)
 
     # 댓글 쓰기
     if request.method == "POST":

@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 # 필수! 커스텀 유저 생성시 settings 에 사용 유저 모델을 정의
 
@@ -15,7 +15,8 @@ class User(AbstractUser):
 
 # AbstractBaseUser 
 # - django 최소 유저 모델 (필드:비밀번호, 마지막로그인, 활성여부 3가지만 존재, 최소한의 함수만 존재)
-# - 따라서, 로그인시 필요한 필드 등 많은 부분이 커스텀가능
+# - 따라서, 로그인시 필요한 필드 등 많은 부분이 커스텀 가능
+# - 하지만, 장고의 유저 관련 함수들을 직접 정의를 하여 사용 해야함
 # class User(AbstractBaseUser):
 #     email = models.EmailField(unique=True)
 #     nickname = models.CharField(max_length=30, null=True)
