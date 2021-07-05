@@ -1,10 +1,9 @@
-.idea/*
+.idea/
 *.pyc
+venv/
+.git/
 .vscode/*
-venv/*
 .DS_Store
-db.sqlite3
-env.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
