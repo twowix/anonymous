@@ -3,7 +3,6 @@ from board.models import Post, Comment
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from datetime import datetime
-from django.conf import settings
 
 
 
@@ -32,7 +31,8 @@ def post_write(request):
         img = request.FILES.get('img', None)
         img_path = None
         if img:
-            img_path = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
+            # img_path = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
+            img_path =f"/post/{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
             default_storage.save(img_path, img)
         Post(
             user_id=request.user.id,

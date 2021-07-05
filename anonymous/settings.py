@@ -18,13 +18,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7^vp6v!_h157ggd=knlq!lg9^zznedvk=(u=8_4boy$@m5y75#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 배포시
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'board',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'anonymous.common_context.img_url_context'
             ],
         },
     },
@@ -73,23 +74,13 @@ WSGI_APPLICATION = 'anonymous.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': '',
-#         'USER': '',
-#         'PASSWORD':'',
-#         'HOST':'localhost',
-#         'PORT':'5432'
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -127,11 +118,39 @@ import os
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+# S3
+STATIC_ROOT = 'static'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+import json
+
+env_json = os.path.join(BASE_DIR, 'env.json')
+with open(env_json) as f:
+    env_json = json.loads(f.read())
+
+AWS_ACCESS_KEY_ID = env_json['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = env_json['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = env_json['S3_BUCKET_NAME']
+S3_ROOT_URL = env_json['S3_ROOT_URL']
+SECRET_KEY = env_json['SECRET_KEY']
+
+# RDS
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env_json['DATABASE_NAME'],
+        'USER': env_json['DATABASE_USER'],
+        'PASSWORD':env_json['DATABASE_PASSWORD'],
+        'HOST':env_json['DATABASE_HOST'],
+        'PORT':'5432'
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
