@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # 배포시
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 전역으로 사용하는 context
                 'anonymous.common_context.img_url_context'
             ],
         },
@@ -113,24 +114,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-import os
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = 'upload'
 
 # S3
-STATIC_ROOT = 'static'
+# STATIC_ROOT = 'static'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 import json
 
-env_json = os.path.join(BASE_DIR, 'env.json')
+env_json = 'env.json'
 with open(env_json) as f:
     env_json = json.loads(f.read())
 

@@ -1,9 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from board.models import Post, Comment
 from django.core.paginator import Paginator
 from django.core.files.storage import default_storage
 from datetime import datetime
-
+import uuid
 
 
 def board(request):
@@ -21,6 +22,7 @@ def board(request):
         return render(request, 'page/index.html', context)
 
 
+@login_required(login_url='sign_in')
 def post_write(request):
     if request.method == "GET":
         return render(request, 'page/post_write.html')
@@ -31,8 +33,17 @@ def post_write(request):
         img = request.FILES.get('img', None)
         img_path = None
         if img:
-            # img_path = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
-            img_path =f"/post/{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
+            # img_name = uuid.uuid4()
+            # # 어쩌.구.저쩌구.png
+            # # ["어쩌","구", "저쩌구", "png"]
+            # ext = img.name.split('.')[-1]
+            #
+            # default_storage.save(f"{img_name}.{ext}", img)
+            # img_url = f"{img_name}.{ext}"
+            # 이미지 저장!
+
+            img_path = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
+            # img_path =f"/post/{datetime.now().strftime('%Y%m%d%H%M%S')}.{str(img.name).split('.')[-1]}"
             default_storage.save(img_path, img)
         Post(
             user_id=request.user.id,

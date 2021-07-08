@@ -9,35 +9,42 @@
                     <h6 class="card-subtitle my-3" style="font-size: 12px">{{ post.user.nickname }}</h6>
                     <p class="card-text mt-4">{{ post.content }}</p>
                     {% if post.img_url %}
-                        <img src="{{ IMG_URL }}{{ post.img_url }}" style="width: 100%">
+                        <img src="{% static post.img_url %}" style="width: 100%">
+                        {#                        <img src="{{ IMG_URL }}{{ post.img_url }}" style="width: 100%">#}
                     {% endif %}
                 </div>
             </div>
-
-            <div class="col">
-                <div class="card mt-3">
-                    <div class="card-body text-end">
-                        <form method="post" id="comment_form">
-                            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <div class="card mt-3">
+                        <div class="card-body text-end">
+                            <form method="post" id="comment_form">
+                                {% csrf_token %}
+                                <!-- 로그인한 유저에게만 댓글을 작성 할 수 있게 숙제! -->
+                                <!-- 로그인안한 유저는 disable/placeholder 로그인후 작성가능 -->
+                                <!-- comment model에 USER FK까지만 걸어주기 -->
                                 <textarea style="resize:none;height: 60px" class="form-control"
                                           placeholder="한번 작성한 글은 삭제할 수 없습니다.&#10;매너를 지켜주세요."
                                           id="content"
                                           name="content"
                                 ></textarea>
-                        </form>
-                        <a class="fs-5 text-decoration-none"
-                           style="color: gray;font-weight: bold;cursor: default" id="comment_write_btn">댓글작성</a>
+                            </form>
+                            <a class="fs-5 text-decoration-none"
+                               style="color: gray;font-weight: bold;cursor: default"
+                               id="comment_write_btn">댓글작성</a>
 
-                    </div>
-                </div>
-                {% for comment in post.comment_set.all %}
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <p class="text-muted m-0" style="font-size: 12px">{{ comment.reg_date|date:"Y.m.d" }}</p>
-                            <p class="m-0">{{ comment.content }}</p>
                         </div>
                     </div>
-                {% endfor %}
+                    {% for comment in post.comment_set.all %}
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <p class="text-muted m-0"
+                                   style="font-size: 12px">{{ comment.reg_date|date:"Y.m.d" }}</p>
+                                <p class="m-0">{{ comment.content }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
@@ -47,21 +54,21 @@
         let content = document.getElementById('content');
 
         comment_write_btn.addEventListener('click', () => {
-            if(content.value){
+            if (content.value) {
                 comment_form.submit();
-            }else{
+            } else {
                 //alert("내용을 작성해주세요.")
             }
         });
 
         // 글이 있을때만 활성화 시키고싶을때
-        content.addEventListener('keyup', ()=>{
-            if(content.value){
-                comment_write_btn.style.color="black";
-                comment_write_btn.style.cursor="pointer";
-            }else{
-                comment_write_btn.style.color="gray";
-                comment_write_btn.style.cursor="default";
+        content.addEventListener('keyup', () => {
+            if (content.value) {
+                comment_write_btn.style.color = "black";
+                comment_write_btn.style.cursor = "pointer";
+            } else {
+                comment_write_btn.style.color = "gray";
+                comment_write_btn.style.cursor = "default";
             }
         })
     </script>
